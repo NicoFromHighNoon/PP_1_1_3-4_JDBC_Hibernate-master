@@ -16,9 +16,9 @@ public class UserDaoHibernateImpl implements UserDao {
     @Override
     public void createUsersTable() {
         try (Session session = sessionFactory.openSession()) {
+            dropUsersTable();
             Transaction transaction = session.beginTransaction();
-
-            session.createSQLQuery("CREATE TABLE `testdb`.`users` ( " +
+            session.createSQLQuery("CREATE TABLE IF NOT EXISTS `testdb`.`users` ( " +
                     "  `id` INT NOT NULL AUTO_INCREMENT, " +
                     "  `name` VARCHAR(45) NULL, " +
                     "  `lastName` VARCHAR(45) NULL, " +
@@ -26,7 +26,8 @@ public class UserDaoHibernateImpl implements UserDao {
                     "  PRIMARY KEY (`id`), " +
                     "  UNIQUE INDEX `id_UNIQUE` (`id` ASC)); ").executeUpdate();
             transaction.commit();
-            session.close();
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 
@@ -36,7 +37,8 @@ public class UserDaoHibernateImpl implements UserDao {
             Transaction transaction = session.beginTransaction();
             session.createSQLQuery("DROP TABLE IF EXISTS users").executeUpdate();
             transaction.commit();
-            session.close();
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 
@@ -47,7 +49,7 @@ public class UserDaoHibernateImpl implements UserDao {
             session.persist(new User(name, lastName, age));
             session.getTransaction().commit();
         } catch (Exception e) {
-            System.out.println("Пользователь не добавлен");
+            e.printStackTrace();
         }
     }
 
@@ -60,6 +62,8 @@ public class UserDaoHibernateImpl implements UserDao {
             query.setParameter("id", id);
             query.executeUpdate();
             session.getTransaction().commit();
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 

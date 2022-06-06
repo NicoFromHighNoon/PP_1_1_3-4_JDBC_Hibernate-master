@@ -17,6 +17,10 @@ public class Util {
     private static final String URL = "jdbc:mysql://localhost:3306/testdb";
     private static final String USERNAME = "root";
     private static final String PASSWORD = "root";
+    private static SessionFactory sessionFactory;
+    private Util() {
+
+    }
 
     public static Connection getConnection() {
         Connection connection = null;
@@ -27,8 +31,6 @@ public class Util {
         }
         return connection;
     }
-
-    private static SessionFactory sessionFactory;
 
     public static SessionFactory getSessionFactory() {
         if (sessionFactory == null) {
